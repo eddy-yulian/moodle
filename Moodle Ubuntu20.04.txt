@@ -1,16 +1,11 @@
-###
-You can see access this documentation on:
-https://github.com/eddy-yulian/moodle.git
-###
-
-1. masuk mode admin (root)
+1. Access admin (root) mode
 	sudo su
 	
 2. update ubuntu 20.04
-apt update
+	apt update
 
 3. Install Nginx dan PHP
-apt install nginx-full
+	apt install nginx-full
 
 4. Trial access nginx on Browser
 	http://localhost
@@ -23,44 +18,38 @@ apt install nginx-full
 6. Check PHP version
 ### ensure your PHP is 8.x version
 	php -v
-	
 ### edit php.ini file
 	nano /etc/php/8.0/fpm/php.ini
-
 ### Change their values as shown below:
-memory_limit = 256M
-upload_max_filesize = 64M
-max_execution_time = 360
-max_input_vars = 5000
-### remove the semicolon (;) given in front of max_input_vars.
+	memory_limit = 256M
+	upload_max_filesize = 64M
+	max_execution_time = 360
+	max_input_vars = 5000
+	### remove the semicolon (;) given in front of max_input_vars.
+	Set date.time with your Time Zone (Asia/Jakarta)
+### Save the file (Ctrl+O, Enter, Ctrl+X)
 
-Set date.time with your Time Zone
-
-Save the file (Ctrl+O, Enter, Ctrl+X)
-
-restart PHP service
+7. Restart PHP service
 	service php8.0-fpm restart
 	
-7. Install database application (MariaDB)
+8. Install database application (MariaDB)
 	curl -LsS -O https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
 	sudo bash mariadb_repo_setup --mariadb-server-version=10.6
-	
 	apt update
 	apt install mariadb-server
 	mysql_secure_installation
 
-8. Create a Database and user for Moodle
+9. Create a Database and user for Moodle
 	mysql -u root -p
-	
 	CREATE DATABASE dbname;
 	#Replace dbname name with whatever you want to use:
-	CREATE USER 'db_user'@'localhost' IDENTIFIED BY 'db_password';
-	#Replace db_user and db_password that you want to use.
-	GRANT ALL ON dbname.* TO 'db_user'@'localhost' IDENTIFIED BY 'db_password' WITH GRANT OPTION;
-	FLUSH PRIVILEGES;
-	EXIT;
+		CREATE USER 'db_user'@'localhost' IDENTIFIED BY 'db_password';
+		#Replace db_user and db_password that you want to use.
+		GRANT ALL ON dbname.* TO 'db_user'@'localhost' IDENTIFIED BY 'db_password' WITH GRANT OPTION;
+		FLUSH PRIVILEGES;
+		EXIT;
 	
-9. Install Moodle
+10. Install Moodle
 	wget https://download.moodle.org/download.php/stable402/moodle-4.2.1.tgz
 	cd /Download
 	tar -zxvf moodle-*tgz
@@ -69,29 +58,28 @@ restart PHP service
 	chown -R www-data:www-data /var/www/html/moodle/ 
 	chmod -R 755 /var/www/html/moodle/
 
-10 Create an Nginx server block for Moodle
+11. Create an Nginx server block for Moodle
 ### Replace yourdomain.com with your domain
 	nano /etc/nginx/sites-available/moodle.conf
-	server {
-    listen 80;
-    listen [::]:80;
-    root /var/www/html/moodle;
-    index  index.php index.html index.htm;
-    server_name  yourdomain.com www.yourdomain.com;
+		server {
+		    listen 80;
+		    listen [::]:80;
+		    root /var/www/html/moodle;
+		    index  index.php index.html index.htm;
+		    server_name  yourdomain.com www.yourdomain.com;
 
-    location / {
-    try_files $uri $uri/ =404;        
-    }
+		    location / {
+		    try_files $uri $uri/ =404;        
+		    }
 
-    location ~ [^/]\.php(/|$) {
-        include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/var/run/php/php8.0-fpm.sock;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        include fastcgi_params;
-    }
+		    location ~ [^/]\.php(/|$) {
+			include snippets/fastcgi-php.conf;
+			fastcgi_pass unix:/var/run/php/php8.0-fpm.sock;
+			fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+			include fastcgi_params;
+		    }
 
-}
-
+		}
 ### Save the file (Ctrl+O, Enter, Ctrl+X)
 
 11. Enable the Created Moodle server configuration block for Nginx
