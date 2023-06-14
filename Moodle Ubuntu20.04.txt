@@ -1,4 +1,8 @@
-@@ -1,103 +0,0 @@
+###
+You can see access this documentation on:
+https://github.com/eddy-yulian/moodle.git
+###
+
 1. masuk mode admin (root)
 	sudo su
 	
