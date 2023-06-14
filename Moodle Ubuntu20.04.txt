@@ -51,7 +51,7 @@
 	
 10. Install Moodle
 	wget https://download.moodle.org/download.php/stable402/moodle-4.2.1.tgz
-	cd /Download
+	cd Downloads
 	tar -zxvf moodle-*tgz
 	mv moodle /var/www/html/
 	mkdir /var/www/html/moodledata
