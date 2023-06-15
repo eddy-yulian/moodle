@@ -32,7 +32,8 @@
 7. Restart PHP service
 	service php8.0-fpm restart
 	
-8. Install database application (MariaDB)
+8. Install database application (MariaDB 10.6)
+	apt install curl
 	curl -LsS -O https://downloads.mariadb.com/MariaDB/mariadb_repo_setup
 	sudo bash mariadb_repo_setup --mariadb-server-version=10.6
 	apt update
@@ -62,26 +63,6 @@
 11. Create an Nginx server block for Moodle
 ### Replace yourdomain.com with your domain
 	nano /etc/nginx/sites-available/moodle.conf
-<<<<<<< HEAD
-	server {
-    		listen 80;
-    		listen [::]:80;
-   		root /var/www/html/moodle;
-    		index  index.php index.html index.htm;
-    		server_name  yourdomain.com www.yourdomain.com;
-
-    		location / {
-    		try_files $uri $uri/ =404;        
-    		}
-
-    		location ~ [^/]\.php(/|$) {
-        	include snippets/fastcgi-php.conf;
-        	fastcgi_pass unix:/var/run/php/php8.0-fpm.sock;
-        	fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        	include fastcgi_params;
-   		}
-	}
-=======
 		server {
 		    listen 80;
 		    listen [::]:80;
@@ -99,9 +80,9 @@
 			fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
 			include fastcgi_params;
 		    }
->>>>>>> 23c4b69eaa286057f280ddb5a8f8404f76152b38
 
 		}
+
 ### Save the file (Ctrl+O, Enter, Ctrl+X)
 
 11. Enable the Created Moodle server configuration block for Nginx
